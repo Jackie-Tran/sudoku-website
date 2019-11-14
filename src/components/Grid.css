@@ -1,0 +1,11 @@
+.container {
+    text-align: "center";
+    align-items: "center";
+    justify-content: "center";
+}
+
+table {
+    width: "100vw";
+    height: "80vh";
+    padding: "0px";
+}
