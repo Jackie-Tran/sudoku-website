@@ -19,11 +19,15 @@ class App extends React.Component {
   }
 
 
-  onCellChange = (row, col, e) => {
+  onCellChange = (row, col, value) => {
+    // Change the grid in state
     const newGrid = this.state.grid;
-    console.log("Event: " + e);
-    console.log("Row: " + row);
-    console.log("Col: " + col);
+    newGrid[row][col] = parseInt(value);
+    this.setState({grid: newGrid});
+  }
+
+  solveSudoku = () => {
+    console.log("Solving Sudoku");
   }
 
   render() {
@@ -45,7 +49,7 @@ class App extends React.Component {
         <div className="solverContainer" id='solver'>
           <h2>Input data in the grid below.</h2>
           <Grid onCellChange={this.onCellChange}/>
-          <a>
+          <a onClick={this.solveSudoku}>
             <div className="btn btn-five">
               <span>SOLVE</span>
             </div>
