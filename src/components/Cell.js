@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 
 export class Cell extends Component {
 
-    
-
     render() {
+        const { row, col } = this.props;
         return (
-            <input style={cellStyle} type="text" maxLength="1"></input>
+            <input style={cellStyle} type="text" maxLength="1" onChange={this.props.onCellChange.bind(this, row, col)} ></input>
         )
     }
 }

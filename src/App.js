@@ -19,6 +19,13 @@ class App extends React.Component {
   }
 
 
+  onCellChange = (row, col, e) => {
+    const newGrid = this.state.grid;
+    console.log("Event: " + e);
+    console.log("Row: " + row);
+    console.log("Col: " + col);
+  }
+
   render() {
     return (
       <div className="App">
@@ -35,10 +42,9 @@ class App extends React.Component {
 
         {/* Section Break */}
         
-
         <div className="solverContainer" id='solver'>
           <h2>Input data in the grid below.</h2>
-          <Grid />
+          <Grid onCellChange={this.onCellChange}/>
           <a>
             <div className="btn btn-five">
               <span>SOLVE</span>
