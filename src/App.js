@@ -16,6 +16,17 @@ class App extends React.Component {
       [0, 0, 0, 4, 1, 9, 0, 0, 5],
       [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ]
+    // grid: [
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    //   [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    // ]
   }
 
 
@@ -26,27 +37,26 @@ class App extends React.Component {
     this.setState({ grid: newGrid });
   }
 
-  checkSudoku = (row, col) => {
+  checkSudoku = (sudoku, row, col) => {
     // Check the row
     let numbersCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const { grid } = this.state;
     for (let j = 0; j < 9; j++) {
-      if (grid[row][j] !== 0 && numbersCheck[Math.abs(grid[row][j])] === 1) {
+      if (sudoku.grid[row][j] !== 0 && numbersCheck[Math.abs(sudoku.grid[row][j])] === 1) {
         // Already saw this number in this row
         return false;
       } else {
-        numbersCheck[grid[row][j]] = 1;
+        numbersCheck[sudoku.grid[row][j]] = 1;
       }
     }
 
     // Check the col
     numbersCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < 9; i++) {
-      if (grid[i][col] !== 0 && numbersCheck[Math.abs(grid[i][col])] === 1) {
+      if (sudoku.grid[i][col] !== 0 && numbersCheck[Math.abs(sudoku.grid[i][col])] === 1) {
         // Already saw this number in this col
         return false;
       } else {
-        numbersCheck[grid[i][col]] = 1;
+        numbersCheck[sudoku.grid[i][col]] = 1;
       }
     }
 
@@ -56,11 +66,11 @@ class App extends React.Component {
     let startCol = col - col % 3;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if (grid[startRow + i][startCol + j] !== 0 && numbersCheck[grid[startRow + i][startCol + j]] === 1) {
+        if (sudoku.grid[startRow + i][startCol + j] !== 0 && numbersCheck[sudoku.grid[startRow + i][startCol + j]] === 1) {
           // Already saw this number in this box
           return false;
         } else {
-          numbersCheck[grid[startRow + i][startCol + j]] = 1;
+          numbersCheck[sudoku.grid[startRow + i][startCol + j]] = 1;
         }
       }
     }
@@ -68,17 +78,16 @@ class App extends React.Component {
     return true;
   }
 
-  isSolved = () => {
-    const { grid } = this.state;
+  isSolved = (sudoku) => {
     // Check rows
     for (let i = 0; i < 9; i++) {
       let numbersCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
       for (let j = 0; j < 9; j++) {
-        if (numbersCheck[grid[i][j]] === 1) {
+        if (numbersCheck[sudoku.grid[i][j]] === 1) {
           // We already saw this number
           return false;
         } else {
-          numbersCheck[grid[i][j]] = 1;
+          numbersCheck[sudoku.grid[i][j]] = 1;
         }
       }
     }
@@ -87,11 +96,11 @@ class App extends React.Component {
     for (let j = 0; j < 9; j++) {
       let numbersCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
       for (let i = 0; i < 9; i++) {
-        if (numbersCheck[grid[i][j]] === 1) {
+        if (numbersCheck[sudoku.grid[i][j]] === 1) {
           // We already saw this number
           return false;
         } else {
-          numbersCheck[grid[i][j]] = 1;
+          numbersCheck[sudoku.grid[i][j]] = 1;
         }
       }
     }
@@ -99,13 +108,13 @@ class App extends React.Component {
     // Check box
     for (let box = 0; box < 9; box++) {
       let numbersCheck = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-      for (let i = 3*(box/3); i < 3*(box/3) + 3; i++) {
-        for (let j = 3*(box%3); j < 3*(box%3) + 3; j++) {
-          if(numbersCheck[grid[i][j]] === 1) {
+      for (let i = 3 * Math.floor(box / 3); i < 3 * Math.floor(box / 3) + 3; i++) {
+        for (let j = 3 * (box % 3); j < 3 * (box % 3) + 3; j++) {
+          if (numbersCheck[sudoku.grid[i][j]] === 1) {
             // We already saw this number
             return false;
           } else {
-            numbersCheck[grid[i][j]] = 1;
+            numbersCheck[sudoku.grid[i][j]] = 1;
           }
         }
       }
@@ -113,10 +122,10 @@ class App extends React.Component {
     return true;
   }
 
-  findEmpty = (row, col) => {
+  findEmpty = (sudoku, row, col) => {
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if (this.state.grid[i][j] <= 0) {
+        if (sudoku.grid[i][j] <= 0) {
           row = i;
           col = j;
           return { row, col }
@@ -129,22 +138,19 @@ class App extends React.Component {
     return { row, col };
   }
 
-  tryValue = (num, row, col) => {
-    const newGrid = this.state.grid;
-    newGrid[row][col] = num;
-    this.setState({ grid: newGrid });
-    return this.checkSudoku(row, col);
+  tryValue = (sudoku, num, row, col) => {
+    sudoku.grid[row][col] = num;
+    return this.checkSudoku(sudoku, row, col);
   }
 
-  solveSudoku = () => {
-    console.log(this.state.grid);
+  solveSudoku = (sudoku, depth = 0) => {
     // Numbers we will try putting in place of empties
     let possibleNumbers = [8, 2, 4, 1, 9, 6, 5, 7, 3];
     let row = 0;
     let col = 0;
 
     // Find empty square we wanmt to fill
-    let emptyPosition = this.findEmpty(row, col);
+    let emptyPosition = this.findEmpty(sudoku, row, col);
     row = emptyPosition.row;
     col = emptyPosition.col;
 
@@ -153,26 +159,27 @@ class App extends React.Component {
     }
 
     // Try all possible values
-    for (const num in possibleNumbers) {
+    for (let i = 0; i < possibleNumbers.length; i++) {
+      let num = possibleNumbers[i];
+      // console.log(num);
       // Check if putting this number is safe
-      if (this.tryValue(num, row, col)) {
-        this.solveSudoku();
-        if (this.isSolved()) {
+      if (this.tryValue(sudoku, num, row, col)) {
+        this.solveSudoku(sudoku, depth + 1);
+        if (this.isSolved(sudoku)) {
           return;
         }
       }
     }
 
-    let newGrid = this.state.grid;
-    this.setState({ grid: newGrid });
+    sudoku.grid[row][col] = 0;
 
   }
 
   onClick = (e) => {
-    console.log(this.state.grid);
-    this.solveSudoku();
+    let sudoku = this.state;
+    this.solveSudoku(sudoku);
     console.log("Solution is: ");
-    console.log(this.state.grid);
+    console.log(sudoku.grid);
   }
 
   render() {
