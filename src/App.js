@@ -4,6 +4,11 @@ import './App.css';
 
 class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.grid = React.createRef();
+  }
+
   state = {
     grid: [
       [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -28,7 +33,6 @@ class App extends React.Component {
     //   [0, 0, 0, 0, 0, 0, 0, 0, 0]
     // ]
   }
-
 
   onCellChange = (row, col, value) => {
     // Change the grid in state
@@ -175,11 +179,22 @@ class App extends React.Component {
 
   }
 
+  displaySudoku = () => {
+    console.log(this.props.children);
+  }
+
   onClick = (e) => {
     let sudoku = this.state;
     this.solveSudoku(sudoku);
     console.log("Solution is: ");
     console.log(sudoku.grid);
+    // Change the value of the cells
+    this.grid.current.updateCells();
+  }
+
+  
+  getCellValue = (row, col) => {
+    return this.state.grid[row][col];
   }
 
   render() {
@@ -200,7 +215,7 @@ class App extends React.Component {
 
         <div className="solverContainer" id='solver'>
           <h2>Input data in the grid below.</h2>
-          <Grid onCellChange={this.onCellChange} />
+          <Grid ref={this.grid} sudoku={this.state.grid} onCellChange={this.onCellChange} getCellValue={this.getCellValue}/>
           <a onClick={this.onClick}>
             <div className="btn btn-five">
               <span>SOLVE</span>

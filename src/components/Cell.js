@@ -3,7 +3,15 @@ import React, { Component } from 'react'
 export class Cell extends Component {
 
     state = {
-        value: ""
+        value: "0"
+    }
+
+    changeValue = () => {
+        // Parent call back function
+        const value = this.props.getCellValue(this.props.row, this.props.col);
+        this.setState({
+            value
+        });
     }
 
     onChange = (e) => {
